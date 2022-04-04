@@ -12,9 +12,7 @@ const addBookHandler = (request, h) => {
   let finished = false;
   if (pageCount === readPage) {
     finished = true;
-  }
-
-  if (name === undefined) {
+  } else if (name === undefined) {
     const response = h.response({
       status: "fail",
       message: "Gagal menambahkan buku. Mohon isi nama buku",
@@ -140,16 +138,16 @@ const getBookByIdHandler = (request, h) => {
     });
     response.code(404);
     return response;
+  } else {
+    const response = h.response({
+      status: "success",
+      data: {
+        book,
+      },
+    });
+    response.code(200);
+    return response;
   }
-
-  const response = h.response({
-    status: "success",
-    data: {
-      book,
-    },
-  });
-  response.code(200);
-  return response;
 };
 
 //edit book
@@ -169,17 +167,14 @@ const editBookByIdHandler = (request, h) => {
     });
     response.code(400);
     return response;
-  }
-  if (readPage > pageCount) {
+  } else if (readPage > pageCount) {
     const response = h.response({
       status: "fail",
       message: "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount",
     });
     response.code(400);
     return response;
-  }
-
-  if (index !== -1) {
+  } else if (index !== -1) {
     books[index] = {
       ...books[index],
       name,
